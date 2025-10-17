@@ -105,7 +105,15 @@ class NovelAITXT2IMGPayload(BaseRequest):
         
         # 设置skip_cfg_above_sigma值
         if self.skip_cfg_above_sigma_enable:
-            self.skip_cfg_above_sigma = 59.04722600415217
+            pixel_count = self.width * self.height
+            if pixel_count == 1024 * 1024:
+                self.skip_cfg_above_sigma = 59.04722600415217
+            elif pixel_count == 1216 * 832:
+                self.skip_cfg_above_sigma = 58.0
+            elif pixel_count == 1408 * 704:
+                self.skip_cfg_above_sigma = 57.40995413696215
+            else:
+                self.skip_cfg_above_sigma = 58.0
         else:
             self.skip_cfg_above_sigma = None
             
