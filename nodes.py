@@ -106,14 +106,25 @@ class NovelAITXT2IMGPayload(BaseRequest):
         # 设置skip_cfg_above_sigma值
         if self.skip_cfg_above_sigma_enable:
             pixel_count = self.width * self.height
-            if pixel_count == 1024 * 1024:
-                self.skip_cfg_above_sigma = 59.04722600415217
-            elif pixel_count == 1216 * 832:
-                self.skip_cfg_above_sigma = 58.0
-            elif pixel_count == 1408 * 704:
-                self.skip_cfg_above_sigma = 57.40995413696215
+            
+            # 预定义的尺寸映射表
+            size_mapping = {
+                1024 * 1024: 59.04722600415217,
+                1216 * 832: 58.0,
+                1408 * 704: 57.40995413696215,
+                832 * 832: 47.97587112837365,
+                768 * 768: 44.285419503114134,
+                704 * 704: 40.59496787785462,
+                640 * 640: 36.90451625259511,
+                768 * 512: 36.158893609242725
+            }
+            
+            # 如果像素数在映射表中，直接使用表中的值
+            if pixel_count in size_mapping:
+                self.skip_cfg_above_sigma = size_mapping[pixel_count]
             else:
-                self.skip_cfg_above_sigma = 58.0
+                # 使用拟合公式计算：skip_cfg_above_sigma ≈ 0.0577 * sqrt(pixel_count)
+                self.skip_cfg_above_sigma = 0.0577 * (pixel_count) ** 0.5
         else:
             self.skip_cfg_above_sigma = None
             
