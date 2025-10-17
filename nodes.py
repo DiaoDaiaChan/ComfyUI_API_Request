@@ -124,7 +124,7 @@ class NovelAITXT2IMGPayload(BaseRequest):
                 self.skip_cfg_above_sigma = size_mapping[pixel_count]
             else:
                 # 使用拟合公式计算：skip_cfg_above_sigma ≈ 0.0577 * sqrt(pixel_count)
-                self.skip_cfg_above_sigma = 0.1 * (pixel_count / 3) ** 0.5
+                self.skip_cfg_above_sigma = 0.1 * (pixel_count / 3.0) ** 0.5
         else:
             self.skip_cfg_above_sigma = None
             
